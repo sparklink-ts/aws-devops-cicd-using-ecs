@@ -2,10 +2,10 @@
 
 
 *Employee Microservices Backend Application (Java, Spring Boot, Microservice, Hibernate, MySQL):*                         
-https://github.com/sparklink-ts/aws-employee-service-crud
+https://github.com/sparklink-ts/aws-employee-service-ecs-crud
 
 *Employee Service Frontend Application (Angular):*                                                                     
-https://github.com/sparklink-ts/aws-employee-service-frontend
+https://github.com/sparklink-ts/aws-employee-service-ecs-frontend
 
 *AWS Deployment Architecture:*                                                                                  
 https://github.com/sparklink-ts/aws-devops-cicd-using-ecs
