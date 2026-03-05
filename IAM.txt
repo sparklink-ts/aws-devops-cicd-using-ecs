@@ -1,0 +1,555 @@
+IAM: 
+Roles : 
+Prefix 	R --> Roles
+	P --> Policies
+	XXXXXXXXXX --> Account ID
+
+R-1. codebuild-sparklinkts-Service-ECS-role  -- Done
+	
+Policy name													Type
+
+R-1-P-1. AmazonEC2ContainerRegistryFullAccess									AWS managed
+R-1-P-2. AmazonEC2ContainerRegistryPowerUser									AWS managed
+R-1-P-3. AmazonSNSFullAccess											AWS managed
+R-1-P-4. CodeBuildBasePolicy-codebuild-sparklinkts-Service-ECS-role-ap-south-1  				Customer managed
+R-1-P-5. CodeBuildBasePolicy-sparklinkts-Service-ECS-ap-south-1							Customer managed
+R-1-P-6. CodeBuildCodeConnectionsSourceCredentialsPolicy-sparklinkts-employee-service-ap-south-1-XXXXXXXXXX	Customer managed
+R-1-P-7. CodeBuildCodeConnectionsSourceCredentialsPolicy-sparklinkts-Service-ECS-ap-south-1			Customer managed
+R-1-P-8. CodeBuildVpcPolicy-sparklinkts-employee-service-ap-south-1						Customer managed
+
+
+R-1-P-4. CodeBuildBasePolicy-codebuild-sparklinkts-Service-ECS-role-ap-south-1 
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:logs:ap-south-1:XXXXXXXXXX:log-group:/aws/codebuild/sparklinkts-employee-service",
+                "arn:aws:logs:ap-south-1:XXXXXXXXXX:log-group:/aws/codebuild/sparklinkts-employee-service:*"
+            ],
+            "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:s3:::codepipeline-ap-south-1-*"
+            ],
+            "Action": [
+                "s3:PutObject",
+                "s3:GetObject",
+                "s3:GetObjectVersion",
+                "s3:GetBucketAcl",
+                "s3:GetBucketLocation"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "codebuild:CreateReportGroup",
+                "codebuild:CreateReport",
+                "codebuild:UpdateReport",
+                "codebuild:BatchPutTestCases",
+                "codebuild:BatchPutCodeCoverages"
+            ],
+            "Resource": [
+                "arn:aws:codebuild:ap-south-1:XXXXXXXXXX:report-group/sparklinkts-employee-service-*"
+            ]
+        }
+    ]
+}
+R-1-P-5. CodeBuildBasePolicy-sparklinkts-Service-ECS-ap-south-1
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Resource": "*",
+            "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Resource": "*",
+            "Action": [
+                "s3:PutObject",
+                "s3:GetObject",
+                "s3:GetObjectVersion",
+                "s3:GetBucketAcl",
+                "s3:GetBucketLocation"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "codebuild:CreateReportGroup",
+                "codebuild:CreateReport",
+                "codebuild:UpdateReport",
+                "codebuild:BatchPutTestCases",
+                "codebuild:BatchPutCodeCoverages"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+
+R-1-P-6. CodeBuildCodeConnectionsSourceCredentialsPolicy-sparklinkts-employee-service-ap-south-1-XXXXXXXXXX
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "codestar-connections:GetConnectionToken",
+                "codestar-connections:GetConnection",
+                "codeconnections:GetConnectionToken",
+                "codeconnections:GetConnection",
+                "codeconnections:UseConnection"
+            ],
+            "Resource": [
+                "arn:aws:codestar-connections:ap-south-1:XXXXXXXXXX:connection/d6a17c92-6d2b-4ba2-9a27-2bdb53c32599",
+                "arn:aws:codeconnections:ap-south-1:XXXXXXXXXX:connection/d6a17c92-6d2b-4ba2-9a27-2bdb53c32599"
+            ]
+        }
+    ]
+}
+R-1-P-7. CodeBuildCodeConnectionsSourceCredentialsPolicy-sparklinkts-Service-ECS-ap-south-1
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "codestar-connections:GetConnectionToken",
+                "codestar-connections:GetConnection",
+                "codeconnections:GetConnectionToken",
+                "codeconnections:GetConnection",
+                "codeconnections:UseConnection"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+R-1-P-8. CodeBuildVpcPolicy-sparklinkts-employee-service-ap-south-1
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ec2:CreateNetworkInterface",
+                "ec2:DescribeDhcpOptions",
+                "ec2:DescribeNetworkInterfaces",
+                "ec2:DeleteNetworkInterface",
+                "ec2:DescribeSubnets",
+                "ec2:DescribeSecurityGroups",
+                "ec2:DescribeVpcs"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ec2:CreateNetworkInterfacePermission"
+            ],
+            "Resource": "arn:aws:ec2:ap-south-1:XXXXXXXXXX:network-interface/*",
+            "Condition": {
+                "StringEquals": {
+                    "ec2:Subnet": [
+                        "arn:aws:ec2:ap-south-1:XXXXXXXXXX:subnet/subnet-0ff1af3a12a959039",
+                        "arn:aws:ec2:ap-south-1:XXXXXXXXXX:subnet/subnet-00efef9889f5c1a91"
+                    ],
+                    "ec2:AuthorizedService": "codebuild.amazonaws.com"
+                }
+            }
+        }
+    ]
+}
+
+R-2 AWSCodePipelineServiceRole-ap-south-1-sparklints-service-ecs -- done
+
+Policy name 											Type
+
+R-2-P-1. AmazonSNSFullAccess									AWS managed
+R-2-P-2. CodePipeline-ECSDeployWithPassRoles-ap-south-1-sparklints-service-ecs-pipeline		Customer managed
+R-2-P-3. CodePipeline-ECSDeploy-ap-south-1-sparklints-service-ecs-pipeline			Customer managed
+R-2-P-4. CodePipeline-CodeConnections-ap-south-1-sparklints-service-ecs-pipeline		Customer managed
+R-2-P-5. CodePipeline-CodeBuild-ap-south-1-sparklints-service-ecs-pipeline			Customer managed
+R-2-P-6. AWSCodePipelineServiceRole-ap-south-1-sparklints-service-ecs-pipeline			Customer managed
+
+R-2-P-2. CodePipeline-ECSDeployWithPassRoles-ap-south-1-sparklints-service-ecs-pipeline
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "IamPassRolePermissions",
+            "Effect": "Allow",
+            "Action": "iam:PassRole",
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "iam:PassedToService": [
+                        "ecs.amazonaws.com",
+                        "ecs-tasks.amazonaws.com"
+                    ]
+                }
+            }
+        }
+    ]
+}
+
+R-2-P-3. CodePipeline-ECSDeploy-ap-south-1-sparklints-service-ecs-pipeline
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "TaskDefinitionPermissions",
+            "Effect": "Allow",
+            "Action": [
+                "ecs:DescribeTaskDefinition",
+                "ecs:RegisterTaskDefinition"
+            ],
+            "Resource": [
+                "*"
+            ]
+        },
+        {
+            "Sid": "ECSServicePermissions",
+            "Effect": "Allow",
+            "Action": [
+                "ecs:DescribeServices",
+                "ecs:UpdateService"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "ECSTagResource",
+            "Effect": "Allow",
+            "Action": [
+                "ecs:TagResource"
+            ],
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "ecs:CreateAction": [
+                        "RegisterTaskDefinition"
+                    ]
+                }
+            }
+        }
+    ]
+}
+
+R-2-P-4. CodePipeline-CodeConnections-ap-south-1-sparklints-service-ecs-pipeline
+
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "codeconnections:UseConnection",
+                "codestar-connections:UseConnection"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+
+
+R-2-P-5. CodePipeline-CodeBuild-ap-south-1-sparklints-service-ecs-pipeline
+
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": [
+                "codebuild:BatchGetBuilds",
+                "codebuild:StartBuild",
+                "codebuild:BatchGetBuildBatches",
+                "codebuild:StartBuildBatch"
+            ],
+            "Resource": "*",
+            "Effect": "Allow"
+        }
+    ]
+}
+
+			
+R-2-P-6. AWSCodePipelineServiceRole-ap-south-1-sparklints-service-ecs-pipeline		
+
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowS3BucketAccess",
+            "Effect": "Allow",
+            "Action": [
+                "s3:GetBucketVersioning",
+                "s3:GetBucketAcl",
+                "s3:GetBucketLocation"
+            ],
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:ResourceAccount": "XXXXXXXXXX"
+                }
+            }
+        },
+        {
+            "Sid": "AllowS3ObjectAccess",
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObject",
+                "s3:PutObjectAcl",
+                "s3:GetObject",
+                "s3:GetObjectVersion"
+            ],
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:ResourceAccount": "XXXXXXXXXX"
+                }
+            }
+        }
+    ]
+}
+
+
+
+
+R-3 codebuild-sparklinkts-aws-angular-build-project-service-role 
+
+Policy name 															Type
+
+R-3-P1. CodeBuildBasePolicy-sparklinkts-aws-angular-build-project-ap-south-1							Customer managed
+R-3-P2. CodeBuildCodeConnectionsSourceCredentialsPolicy-sparklinkts-aws-angular-build-project-ap-south-1-XXXXXXXXXX		Customer managed
+R-3-P3. CodeBuildCodeConnectionsSourceCredentialsPolicy-sparklinkts-employee-service-angular-ap-south-1-XXXXXXXXXX		Customer managed
+
+R-3-P1. CodeBuildBasePolicy-sparklinkts-aws-angular-build-project-ap-south-1
+
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:logs:ap-south-1:XXXXXXXXXX:log-group:/aws/codebuild/sparklinkts-employee-service-angular",
+                "arn:aws:logs:ap-south-1:XXXXXXXXXX:log-group:/aws/codebuild/sparklinkts-employee-service-angular:*"
+            ],
+            "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:s3:::codepipeline-ap-south-1-*"
+            ],
+            "Action": [
+                "s3:PutObject",
+                "s3:GetObject",
+                "s3:GetObjectVersion",
+                "s3:GetBucketAcl",
+                "s3:GetBucketLocation"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "codebuild:CreateReportGroup",
+                "codebuild:CreateReport",
+                "codebuild:UpdateReport",
+                "codebuild:BatchPutTestCases",
+                "codebuild:BatchPutCodeCoverages"
+            ],
+            "Resource": [
+                "arn:aws:codebuild:ap-south-1:XXXXXXXXXX:report-group/sparklinkts-employee-service-angular-*"
+            ]
+        }
+    ]
+}
+
+R-3-P2. CodeBuildCodeConnectionsSourceCredentialsPolicy-sparklinkts-aws-angular-build-project-ap-south-1-XXXXXXXXXX
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "codestar-connections:GetConnectionToken",
+                "codestar-connections:GetConnection",
+                "codeconnections:GetConnectionToken",
+                "codeconnections:GetConnection",
+                "codeconnections:UseConnection"
+            ],
+            "Resource": [
+                "arn:aws:codestar-connections:ap-south-1:XXXXXXXXXX:connection/9edb3285-c00f-4514-8209-9711ad4451c6",
+                "arn:aws:codeconnections:ap-south-1:XXXXXXXXXX:connection/9edb3285-c00f-4514-8209-9711ad4451c6"
+            ]
+        }
+    ]
+}
+
+R-3-P3. CodeBuildCodeConnectionsSourceCredentialsPolicy-sparklinkts-employee-service-angular-ap-south-1-XXXXXXXXXX
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "codestar-connections:GetConnectionToken",
+                "codestar-connections:GetConnection",
+                "codeconnections:GetConnectionToken",
+                "codeconnections:GetConnection",
+                "codeconnections:UseConnection"
+            ],
+            "Resource": [
+                "arn:aws:codestar-connections:ap-south-1:XXXXXXXXXX:connection/d6a17c92-6d2b-4ba2-9a27-2bdb53c32599",
+                "arn:aws:codeconnections:ap-south-1:XXXXXXXXXX:connection/d6a17c92-6d2b-4ba2-9a27-2bdb53c32599"
+            ]
+        }
+    ]
+}
+
+
+
+
+
+R-4. AWSCodePipelineServiceRole-ap-south-1-sparklinkts-aws-angular 
+
+Policy name 										Type
+
+R-4-P1. AWSCodePipelineServiceRole-ap-south-1-sparklinkts-aws-angular				Customer managed
+R-4-P2. CodePipeline-CodeBuild-ap-south-1-sparklinkts-aws-angular				Customer managed
+R-4-P3. CodePipeline-CodeConnections-ap-south-1-sparklinkts-aws-angular				Customer managed
+R-4-P4. CodePipeline-S3Deploy-ap-south-1-sparklinkts-aws-angular				Customer managed
+
+
+
+R-4-P1. AWSCodePipelineServiceRole-ap-south-1-sparklinkts-aws-angular
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowS3BucketAccess",
+            "Effect": "Allow",
+            "Action": [
+                "s3:GetBucketVersioning",
+                "s3:GetBucketAcl",
+                "s3:GetBucketLocation"
+            ],
+            "Resource": [
+                "arn:aws:s3:::codepipeline-ap-south-1-9c2333e57a32-4429-bc11-d35bb558cd94"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "aws:ResourceAccount": "XXXXXXXXXX"
+                }
+            }
+        },
+        {
+            "Sid": "AllowS3ObjectAccess",
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObject",
+                "s3:PutObjectAcl",
+                "s3:GetObject",
+                "s3:GetObjectVersion"
+            ],
+            "Resource": [
+                "arn:aws:s3:::codepipeline-ap-south-1-9c2333e57a32-4429-bc11-d35bb558cd94/*"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "aws:ResourceAccount": "XXXXXXXXXX"
+                }
+            }
+        }
+    ]
+}
+	
+R-4-P2. CodePipeline-CodeBuild-ap-south-1-sparklinkts-aws-angular
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": [
+                "codebuild:BatchGetBuilds",
+                "codebuild:StartBuild",
+                "codebuild:BatchGetBuildBatches",
+                "codebuild:StartBuildBatch"
+            ],
+            "Resource": [
+                "arn:aws:codebuild:*:XXXXXXXXXX:project/sparklinkts-aws-angular-build-project"
+            ],
+            "Effect": "Allow"
+        }
+    ]
+}				
+R-4-P3. CodePipeline-CodeConnections-ap-south-1-sparklinkts-aws-angular	
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "codeconnections:UseConnection",
+                "codestar-connections:UseConnection"
+            ],
+            "Resource": [
+                "arn:aws:codestar-connections:*:XXXXXXXXXX:connection/e29da4e1-2b54-47d2-8b37-56bda0d1939b",
+                "arn:aws:codeconnections:*:XXXXXXXXXX:connection/e29da4e1-2b54-47d2-8b37-56bda0d1939b"
+            ]
+        }
+    ]
+}			
+R-4-P4. CodePipeline-S3Deploy-ap-south-1-sparklinkts-aws-angular				
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObject",
+                "s3:PutObjectAcl",
+                "s3:PutObjectVersionAcl",
+                "s3:GetBucketVersioning",
+                "s3:GetBucketAcl",
+                "s3:GetBucketLocation"
+            ],
+            "Resource": [
+                "arn:aws:s3:::sparklinkts-aws-angular",
+                "arn:aws:s3:::sparklinkts-aws-angular/*"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "aws:ResourceAccount": "XXXXXXXXXX"
+                }
+            }
+        }
+    ]
+}
+
+
+R-5. AWSServiceRoleForECS -- Done
+	
+	Policy name 				Type
+
+R-5-P-1. AmazonECSServiceRolePolicy		AWS managed
+
+
+R-6. ecsTaskExecutionRole --Done
+
+	Policy name 				Type
+
+R6-p-1. AmazonECSTaskExecutionRolePolicy	AWS managed
