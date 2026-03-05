@@ -1,3 +1,5 @@
+***Angular Based Frontend Deployments***
+
 To deploy an Angular application using AWS CodePipeline, the standard approach is to use Amazon S3 for static website hosting or Amazon EC2 with CodeDeploy for server-side rendering or more complex setups. The S3 method is typically more cost-effective and scalable for standard Angular single-page applications (SPAs). 
 Core AWS Services Involved 
 
